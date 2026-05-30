@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Link Launcher</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    padding:30px;
+    color:white;
+    overflow-x:hidden;
+
+    background:
+    linear-gradient(
+        rgba(0,0,0,.85),
+        rgba(0,0,0,.90)
+    ),
+    url("https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=1920");
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+
+    background:
+    radial-gradient(
+        circle at top right,
+        rgba(255,215,0,.12),
+        transparent 40%
+    ),
+    radial-gradient(
+        circle at bottom left,
+        rgba(255,215,0,.08),
+        transparent 40%
+    );
+
+    pointer-events:none;
+    z-index:0;
+}
+
+.container{
+    position:relative;
+    z-index:1;
+}
+
+h1{
+    text-align:center;
+    font-size:3rem;
+    font-weight:800;
+
+    background:
+    linear-gradient(
+        135deg,
+        #fff7c7,
+        #ffd700,
+        #c89b2c
+    );
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+
+    margin-bottom:10px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#999;
+    margin-bottom:40px;
+}
+
+.add-box{
+    max-width:850px;
+    margin:auto;
+    display:flex;
+    gap:15px;
+}
+
+input{
+    flex:1;
+    padding:18px 22px;
+
+    border-radius:20px;
+    border:1px solid rgba(255,215,0,.15);
+
+    background:rgba(255,255,255,.05);
+
+    backdrop-filter:blur(15px);
+
+    color:white;
+    font-size:16px;
+
+    outline:none;
+    transition:.3s;
+}
+
+input:focus{
+    border-color:#ffd700;
+
+    box-shadow:
+    0 0 25px rgba(255,215,0,.25);
+}
+
+.add-btn{
+    border:none;
+    cursor:pointer;
+
+    padding:18px 28px;
+
+    border-radius:20px;
+
+    font-weight:700;
+    color:black;
+
+    background:
+    linear-gradient(
+        135deg,
+        #fff6bf,
+        #ffd700,
+        #c89b2c
+    );
+
+    transition:.3s;
+}
+
+.add-btn:hover{
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 10px 25px rgba(255,215,0,.30);
+}
+
+.apps{
+    margin-top:50px;
+
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fill,minmax(180px,1fr));
+
+    gap:25px;
+}
+
+.app{
+    position:relative;
+
+    padding:25px;
+
+    border-radius:30px;
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(255,255,255,.08),
+        rgba(255,255,255,.03)
+    );
+
+    backdrop-filter:blur(20px);
+
+    border:
+    1px solid rgba(255,215,0,.15);
+
+    transition:.35s;
+}
+
+.app::before{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    border-radius:30px;
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(255,215,0,.12),
+        transparent,
+        transparent
+    );
+
+    pointer-events:none;
+}
+
+.app:hover{
+    transform:
+    translateY(-8px)
+    scale(1.03);
+
+    border-color:
+    rgba(255,215,0,.35);
+
+    box-shadow:
+    0 15px 35px rgba(0,0,0,.45),
+    0 0 25px rgba(255,215,0,.15);
+}
+
+.app a{
+    text-decoration:none;
+    color:white;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.app img{
+    width:90px;
+    height:90px;
+
+    background:white;
+
+    border-radius:24px;
+
+    padding:10px;
+
+    object-fit:contain;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.35);
+}
+
+.app-name{
+    margin-top:15px;
+    text-align:center;
+    font-weight:600;
+    font-size:15px;
+
+    word-break:break-word;
+}
+
+.delete{
+    position:absolute;
+
+    top:10px;
+    right:10px;
+
+    width:32px;
+    height:32px;
+
+    border:none;
+    border-radius:50%;
+
+    background:#ff3b30;
+
+    color:white;
+    cursor:pointer;
+
+    z-index:10;
+
+    transition:.3s;
+}
+
+.delete:hover{
+    transform:scale(1.1);
+}
+
+.empty{
+    text-align:center;
+    color:#888;
+    margin-top:80px;
+    font-size:18px;
+}
+
+@media(max-width:700px){
+
+    body{
+        padding:20px;
+    }
+
+    h1{
+        font-size:2.2rem;
+    }
+
+    .add-box{
+        flex-direction:column;
+    }
+
+    .add-btn{
+        width:100%;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Premium Link Launcher</h1>
+
+    <p class="subtitle">
+        Turn any website into a beautiful app launcher
+    </p>
+
+    <div class="add-box">
+
+        <input
+            type="text"
+            id="urlInput"
+            placeholder="https://youtube.com">
+
+        <button
+            class="add-btn"
+            onclick="addApp()">
+            Add App
+        </button>
+
+    </div>
+
+    <div
+        class="apps"
+        id="apps">
+    </div>
+
+</div>
+
+<script>
+
+let apps =
+JSON.parse(
+localStorage.getItem("premiumApps")
+) || [];
+
+function getDomain(url){
+
+    try{
+        return new URL(url).hostname;
+    }
+    catch{
+        return null;
+    }
+
+}
+
+function renderApps(){
+
+    const container =
+    document.getElementById("apps");
+
+    container.innerHTML = "";
+
+    if(apps.length === 0){
+
+        container.innerHTML =
+        '<div class="empty">No apps added yet.</div>';
+
+        return;
+    }
+
+    apps.forEach((url,index)=>{
+
+        const domain =
+        getDomain(url);
+
+        if(!domain) return;
+
+        const favicon =
+        `https://www.google.com/s2/favicons?domain=${domain}&sz=256`;
+
+        const card =
+        document.createElement("div");
+
+        card.className = "app";
+
+        card.innerHTML = `
+            <button
+                class="delete"
+                onclick="deleteApp(${index})">
+                ✕
+            </button>
+
+            <a href="${url}" target="_blank">
+
+                <img src="${favicon}" alt="icon">
+
+                <div class="app-name">
+                    ${domain.replace("www.","")}
+                </div>
+
+            </a>
+        `;
+
+        container.appendChild(card);
+
+    });
+
+}
+
+function addApp(){
+
+    let url =
+    document
+    .getElementById("urlInput")
+    .value
+    .trim();
+
+    if(!url){
+        alert("Please enter a URL");
+        return;
+    }
+
+    if(
+        !url.startsWith("https://") &&
+        !url.startsWith("http://")
+    ){
+        url = "https://" + url;
+    }
+
+    apps.push(url);
+
+    localStorage.setItem(
+        "premiumApps",
+        JSON.stringify(apps)
+    );
+
+    document
+    .getElementById("urlInput")
+    .value = "";
+
+    renderApps();
+
+}
+
+function deleteApp(index){
+
+    apps.splice(index,1);
+
+    localStorage.setItem(
+        "premiumApps",
+        JSON.stringify(apps)
+    );
+
+    renderApps();
+
+}
+
+document
+.getElementById("urlInput")
+.addEventListener("keypress",e=>{
+
+    if(e.key==="Enter"){
+        addApp();
+    }
+
+});
+
+renderApps();
+
+</script>
+
+</body>
+</html>
