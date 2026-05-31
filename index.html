@@ -3,507 +3,291 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Premium Link Launcher</title>
-
+<title>Premium Link Launcher - Drag & Drop</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
 
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Inter',sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
 
 body{
-    min-height:100vh;
-    padding:30px;
-    color:white;
-    overflow-x:hidden;
-
-    background:
-    linear-gradient(
-        rgba(0,0,0,.85),
-        rgba(0,0,0,.90)
-    ),
-    url("https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=1920");
-
-    background-size:cover;
-    background-position:center;
-    background-attachment:fixed;
-}
-
-body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-
-    background:
-    radial-gradient(
-        circle at top right,
-        rgba(255,215,0,.12),
-        transparent 40%
-    ),
-    radial-gradient(
-        circle at bottom left,
-        rgba(255,215,0,.08),
-        transparent 40%
-    );
-
-    pointer-events:none;
-    z-index:0;
-}
-
-.container{
-    position:relative;
-    z-index:1;
+min-height:100vh;
+padding:30px;
+color:#fff;
+background:
+linear-gradient(rgba(0,0,0,.85),rgba(0,0,0,.9)),
+url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=1920');
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
 }
 
 h1{
-    text-align:center;
-    font-size:3rem;
-    font-weight:800;
-
-    background:
-    linear-gradient(
-        135deg,
-        #fff7c7,
-        #ffd700,
-        #c89b2c
-    );
-
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-
-    margin-bottom:10px;
+text-align:center;
+font-size:3rem;
+margin-bottom:10px;
+background:linear-gradient(135deg,#fff7c7,#ffd700,#c89b2c);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
 .subtitle{
-    text-align:center;
-    color:#999;
-    margin-bottom:40px;
+text-align:center;
+color:#aaa;
+margin-bottom:30px;
 }
 
 .add-box{
-    max-width:850px;
-    margin:auto;
-    display:flex;
-    gap:15px;
+max-width:1000px;
+margin:auto;
+display:flex;
+gap:12px;
 }
 
 input{
-    flex:1;
-    padding:18px 22px;
-
-    border-radius:20px;
-    border:1px solid rgba(255,215,0,.15);
-
-    background:rgba(255,255,255,.05);
-
-    backdrop-filter:blur(15px);
-
-    color:white;
-    font-size:16px;
-
-    outline:none;
-    transition:.3s;
+flex:1;
+padding:18px;
+border-radius:18px;
+border:1px solid rgba(255,215,0,.2);
+background:rgba(255,255,255,.05);
+color:#fff;
 }
 
-input:focus{
-    border-color:#ffd700;
-
-    box-shadow:
-    0 0 25px rgba(255,215,0,.25);
-}
-
-.add-btn{
-    border:none;
-    cursor:pointer;
-
-    padding:18px 28px;
-
-    border-radius:20px;
-
-    font-weight:700;
-    color:black;
-
-    background:
-    linear-gradient(
-        135deg,
-        #fff6bf,
-        #ffd700,
-        #c89b2c
-    );
-
-    transition:.3s;
-}
-
-.add-btn:hover{
-    transform:translateY(-3px);
-
-    box-shadow:
-    0 10px 25px rgba(255,215,0,.30);
+.btn{
+padding:18px 24px;
+border:none;
+border-radius:18px;
+font-weight:700;
+cursor:pointer;
+background:linear-gradient(135deg,#fff7c7,#ffd700,#c89b2c);
 }
 
 .apps{
-    margin-top:50px;
-
-    display:grid;
-    grid-template-columns:
-    repeat(auto-fill,minmax(180px,1fr));
-
-    gap:25px;
+margin-top:40px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+gap:20px;
 }
 
 .app{
-    position:relative;
-
-    padding:25px;
-
-    border-radius:30px;
-
-    background:
-    linear-gradient(
-        145deg,
-        rgba(255,255,255,.08),
-        rgba(255,255,255,.03)
-    );
-
-    backdrop-filter:blur(20px);
-
-    border:
-    1px solid rgba(255,215,0,.15);
-
-    transition:.35s;
-}
-
-.app::before{
-    content:"";
-
-    position:absolute;
-    inset:0;
-
-    border-radius:30px;
-
-    background:
-    linear-gradient(
-        135deg,
-        rgba(255,215,0,.12),
-        transparent,
-        transparent
-    );
-
-    pointer-events:none;
+position:relative;
+padding:25px;
+border-radius:25px;
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(12px);
+border:1px solid rgba(255,215,0,.15);
+transition:.3s;
+cursor:grab;
 }
 
 .app:hover{
-    transform:
-    translateY(-8px)
-    scale(1.03);
-
-    border-color:
-    rgba(255,215,0,.35);
-
-    box-shadow:
-    0 15px 35px rgba(0,0,0,.45),
-    0 0 25px rgba(255,215,0,.15);
-}
-
-.app a{
-    text-decoration:none;
-    color:white;
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
+transform:translateY(-5px);
 }
 
 .app img{
-    width:90px;
-    height:90px;
+width:90px;
+height:90px;
+background:#fff;
+padding:10px;
+border-radius:20px;
+}
 
-    background:white;
-
-    border-radius:24px;
-
-    padding:10px;
-
-    object-fit:contain;
-
-    box-shadow:
-    0 10px 25px rgba(0,0,0,.35);
+.app a{
+text-decoration:none;
+color:white;
+display:flex;
+flex-direction:column;
+align-items:center;
 }
 
 .app-name{
-    margin-top:15px;
-    text-align:center;
-    font-weight:600;
-    font-size:15px;
-    word-break:break-word;
+margin-top:15px;
+text-align:center;
 }
 
 .actions{
-    position:absolute;
-    top:10px;
-    right:10px;
-    display:flex;
-    gap:6px;
-    z-index:10;
+position:absolute;
+top:10px;
+right:10px;
+display:flex;
+gap:5px;
 }
 
-.edit,
-.delete{
-    width:32px;
-    height:32px;
-    border:none;
-    border-radius:50%;
-    color:white;
-    cursor:pointer;
-    transition:.3s;
+.actions button{
+width:30px;
+height:30px;
+border:none;
+border-radius:50%;
+cursor:pointer;
+color:#fff;
 }
 
-.edit{
-    background:#ffb300;
-}
+.edit{background:#ffb300}
+.delete{background:#ff3b30}
 
-.delete{
-    background:#ff3b30;
-}
-
-.edit:hover,
-.delete:hover{
-    transform:scale(1.1);
+.sortable-ghost{
+opacity:.3;
 }
 
 .empty{
-    text-align:center;
-    color:#888;
-    margin-top:80px;
-    font-size:18px;
-    grid-column:1/-1;
+grid-column:1/-1;
+text-align:center;
+color:#999;
 }
-
-@media(max-width:700px){
-
-    body{
-        padding:20px;
-    }
-
-    h1{
-        font-size:2.2rem;
-    }
-
-    .add-box{
-        flex-direction:column;
-    }
-
-    .add-btn{
-        width:100%;
-    }
-
-}
-
 </style>
 </head>
 <body>
 
-<div class="container">
+<h1>Premium Link Launcher</h1>
+<p class="subtitle">Drag & Drop to rearrange apps</p>
 
-    <h1>Premium Link Launcher</h1>
-
-    <p class="subtitle">
-        Turn any website into a beautiful app launcher
-    </p>
-
-    <div class="add-box">
-
-        <input
-            type="text"
-            id="urlInput"
-            placeholder="https://youtube.com">
-
-        <button
-            class="add-btn"
-            onclick="addApp()">
-            Add App
-        </button>
-
-    </div>
-
-    <div class="apps" id="apps"></div>
-
+<div class="add-box">
+<input id="urlInput" placeholder="https://example.com">
+<button class="btn" onclick="addApp()">Add App</button>
+<button class="btn" onclick="resetApps()">Reset</button>
 </div>
 
-<script>
+<div class="apps" id="apps"></div>
 
-let apps =
-JSON.parse(
-localStorage.getItem("premiumApps")
-) || [];
+<script>
+const defaultApps=[
+{url:"https://anidap.se/home",name:"ANIDAP"},
+{url:"https://reanime.to/home",name:"ReAnime"},
+{url:"https://animetsu.net/",name:"Animetsu"},
+{url:"https://anime.uniquestream.net/",name:"UniqueStream"},
+{url:"https://anime.nexus/",name:"Anime Nexus"},
+{url:"https://moviebox.ph/",name:"MovieBox"},
+{url:"https://atsu.moe/",name:"Atsu"},
+{url:"https://kajzu.com/z/",name:"Kajzu"},
+{url:"https://tukoz.com/t/",name:"Tukoz"},
+{url:"https://naqibxc-alt.github.io/link/",name:"Naqib Link"},
+{url:"https://www.lapakgaming.com/en-my",name:"Lapak Gaming"},
+{url:"https://www.kachishop.com/my/",name:"Kachi Shop"},
+{url:"https://www.codashop.com/en-my/",name:"Codashop"},
+{url:"https://chatgpt.com/",name:"ChatGPT"},
+{url:"https://gemini.google.com/app",name:"Gemini"},
+{url:"https://claude.ai/login",name:"Claude"},
+{url:"https://copilot.microsoft.com/",name:"Copilot"},
+{url:"https://grok.com/",name:"Grok"},
+{url:"https://www.perplexity.ai/",name:"Perplexity"},
+{url:"https://www.deepseek.com/en/",name:"DeepSeek"}
+];
+
+let apps=JSON.parse(localStorage.getItem("premiumApps"));
+
+if(!apps){
+apps=[...defaultApps];
+save();
+}
+
+function save(){
+localStorage.setItem("premiumApps",JSON.stringify(apps));
+}
 
 function getDomain(url){
-
-    try{
-        return new URL(url).hostname;
-    }
-    catch{
-        return null;
-    }
-
+try{return new URL(url).hostname}catch{return ""}
 }
 
 function renderApps(){
 
-    const container =
-    document.getElementById("apps");
+const container=document.getElementById("apps");
+container.innerHTML="";
 
-    container.innerHTML = "";
+apps.forEach((app,index)=>{
 
-    if(apps.length === 0){
+const domain=getDomain(app.url);
+const icon=`https://www.google.com/s2/favicons?domain=${domain}&sz=256`;
 
-        container.innerHTML =
-        '<div class="empty">No apps added yet.</div>';
+const card=document.createElement("div");
+card.className="app";
+card.dataset.index=index;
 
-        return;
-    }
+card.innerHTML=`
+<div class="actions">
+<button class="edit" onclick="renameApp(${index})">✎</button>
+<button class="delete" onclick="deleteApp(${index})">✕</button>
+</div>
 
-    apps.forEach((app,index)=>{
+<a href="${app.url}" target="_blank">
+<img src="${icon}">
+<div class="app-name">${app.name}</div>
+</a>
+`;
 
-        const domain =
-        getDomain(app.url);
+container.appendChild(card);
+});
 
-        if(!domain) return;
+new Sortable(container,{
+animation:200,
+onEnd:function(evt){
 
-        const favicon =
-        `https://www.google.com/s2/favicons?domain=${domain}&sz=256`;
+const moved=apps.splice(evt.oldIndex,1)[0];
+apps.splice(evt.newIndex,0,moved);
 
-        const card =
-        document.createElement("div");
+save();
+renderApps();
 
-        card.className = "app";
-
-        card.innerHTML = `
-            <div class="actions">
-
-                <button
-                    class="edit"
-                    onclick="renameApp(${index})">
-                    ✎
-                </button>
-
-                <button
-                    class="delete"
-                    onclick="deleteApp(${index})">
-                    ✕
-                </button>
-
-            </div>
-
-            <a href="${app.url}" target="_blank">
-
-                <img src="${favicon}" alt="icon">
-
-                <div class="app-name">
-                    ${app.name}
-                </div>
-
-            </a>
-        `;
-
-        container.appendChild(card);
-
-    });
+}
+});
 
 }
 
 function addApp(){
 
-    let url =
-    document
-    .getElementById("urlInput")
-    .value
-    .trim();
+let url=document.getElementById("urlInput").value.trim();
 
-    if(!url){
-        alert("Please enter a URL");
-        return;
-    }
+if(!url)return;
 
-    if(
-        !url.startsWith("https://") &&
-        !url.startsWith("http://")
-    ){
-        url = "https://" + url;
-    }
+if(!url.startsWith("http")){
+url="https://"+url;
+}
 
-    const customName =
-    prompt("Enter app name:");
+const name=prompt("App Name")||getDomain(url);
 
-    apps.push({
-        url:url,
-        name:customName || getDomain(url)
-    });
+apps.push({url,name});
 
-    localStorage.setItem(
-        "premiumApps",
-        JSON.stringify(apps)
-    );
+save();
+renderApps();
 
-    document
-    .getElementById("urlInput")
-    .value = "";
-
-    renderApps();
-
+document.getElementById("urlInput").value="";
 }
 
 function renameApp(index){
 
-    const newName =
-    prompt(
-        "New app name:",
-        apps[index].name
-    );
+const name=prompt("New Name",apps[index].name);
 
-    if(!newName) return;
+if(!name)return;
 
-    apps[index].name = newName;
+apps[index].name=name;
 
-    localStorage.setItem(
-        "premiumApps",
-        JSON.stringify(apps)
-    );
-
-    renderApps();
+save();
+renderApps();
 
 }
 
 function deleteApp(index){
 
-    apps.splice(index,1);
+apps.splice(index,1);
 
-    localStorage.setItem(
-        "premiumApps",
-        JSON.stringify(apps)
-    );
-
-    renderApps();
+save();
+renderApps();
 
 }
 
-document
-.getElementById("urlInput")
-.addEventListener("keypress",e=>{
+function resetApps(){
 
-    if(e.key==="Enter"){
-        addApp();
-    }
+if(confirm("Reset all apps?")){
 
-});
+apps=[...defaultApps];
 
+save();
 renderApps();
 
+}
+
+}
+
+renderApps();
 </script>
 
 </body>
